@@ -1,0 +1,409 @@
+.c3-line, .c3-focused {stroke-width: 3px !important;}
+            .c3-bar {stroke: white !important; stroke-width: 1;}
+            .c3 text { font-size: 12px; color: grey;}
+            .tick line {stroke: white;}
+            .c3-axis path {stroke: grey;}
+            .c3-circle { opacity: 1 !important; }
+            .c3-xgrid-focus {visibility: hidden !important;}
+.pvtUi {
+	color: #333;
+}
+.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: grey;
+  }
+table.pvtTable {
+	font-size: 8pt;
+	text-align: left;
+	border-collapse: collapse;
+	table-layout: fixed;
+	width: 100%;
+}
+
+table.pvtTable tr th, table.pvtTable tr th {
+	background-color: #ECF1F7;
+    border: 1px solid #ccc;
+    font-size: 14px;
+	padding: 10px;
+	color: #2C84CE;
+}
+
+table.pvtTable .pvtColLabel {
+    text-align: center;
+    word-wrap: break-word;
+}
+
+table.pvtTable .pvtTotalLabel {
+	text-align: left;
+	width: 20%;
+}
+
+table.pvtTable tr td {
+	color: #333333;
+	padding: 5px;
+	background-color: #FFF;
+	border: 1px solid #ccc;
+	vertical-align: top;
+	text-align: center;
+	font-size: 14px;
+}
+
+#chart {
+    background: #fff;
+}
+
+.chart_chart > table{
+	border-collapse: collapse;
+	width:100%;
+}
+
+.chart_chart > table > tbody > tr > td {
+    border: 1px solid #ccc;
+}
+.chart_chart > table > tbody > tr:last-child {
+    box-shadow: 0 8px 6px -6px rgba(0,0,0,0.2);
+}
+.pvtTotal, .pvtGrandTotal {
+	font-weight: bold;
+}
+.pvtTrCenter {
+	clear: both;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+}
+.pvtAggregatorDiv {
+	position: absolute;
+    top: 31PX;
+	left: 51%;
+	width: 21%;
+}
+.pvtAggregator {
+    background: #fFF;
+    box-shadow: none;
+    border-radius: 0px;
+    border: 1px solid #ccc;
+    width: 100%;
+    white-space: nowrap;
+    height: 41px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    color: #333333;
+    text-align: left;
+    padding: 1px 6px;
+}
+.pvtAttrDropdownDiv {
+	position: absolute;
+    top: 31PX;
+	left: 75%;
+	width: 21%;
+}
+.pvtAttrDropdown {
+    background: #fFF;
+    box-shadow: none;
+    border-radius: 0px;
+    border: 1px solid #ccc;
+    width: 100%;
+    white-space: nowrap;
+    height: 41px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    color: #333333;
+    text-align: left;
+    padding: 1px 6px;
+}
+.divColList {
+	display: inline-block;
+	border: none !important;
+	float: left;
+}
+.pvtAxisContainer{
+	padding: 2px;
+}
+.pvtAxisContainer {
+	min-width: 20px;
+	min-height: 20px;
+}
+
+.pvtVals {
+	min-width: 20px;
+	min-height: 20px;
+	border: none !important;
+    background-color: #ebeae8;
+}
+.pvtAxisContainerTD{
+    background:#efe;
+}
+.pvtAxisContainer li {
+	padding: 8px 6px;
+	list-style-type: none;
+    cursor: move;
+    float:left;
+}
+
+.pvtCols
+{
+	height: 40px;
+	padding: 5px 5px 1px 5px;
+	background: #fff;
+	box-shadow: 3px 2px 10px 0 rgba(0,0,0,0.2);
+}
+
+
+.pvtRows
+{
+    vertical-align: top;
+    width: 135px;
+	min-width: 135px;
+	padding: 5px;
+	background: #fff;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2);
+}
+.pvtAxisContainer li.pvtPlaceholder {
+	-webkit-border-radius: 5px;
+	padding: 3px 15px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px dashed #aaa;
+}
+
+.pvtRendererControl {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 5px 5px 5px 10px;
+}
+
+.pvtAxisContainer li span.pvtAttr {
+    -webkit-text-size-adjust: 100%;
+    background: #F3F3F3;
+    border: 1px solid #DEDEDE;
+    padding: 5px 15px 5px 5px;
+    white-space: nowrap;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    min-width: 100px;
+}
+
+.pvtTriangle {
+	cursor: pointer;
+	color: grey;
+	position: absolute;
+    right: 5px;
+    top: 0px;
+}
+
+.pvtHorizList li {
+	float: left;
+}
+
+.pvtVertList {
+	vertical-align: top;
+}
+
+.pvtFilteredAttribute {
+	font-style: italic
+}
+
+.pvtFilterBox {
+	z-index: 100;
+    left: calc(50%) !important;
+    top: calc(50% - 100px) !important;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    position: absolute;
+    padding: 10px;
+    text-align: center;
+    min-height: 60px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.3);
+    position:fixed;
+}
+
+.pvtFilterBox h4 {
+	margin: 0;
+}
+
+.pvtFilterBox p {
+	margin: 0.5em auto;
+}
+
+.pvtFilterBox label {
+	font-weight: normal;
+}
+
+.pvtFilterBox input[type='checkbox'] {
+	margin-right: 5px;
+}
+
+.pvtCheckContainer {
+	text-align: left;
+	overflow-y: auto;
+	width: 100%;
+	max-height: 200px;
+}
+.btnFilter {
+	float: right;
+	width: 25px;
+	height: 27px;
+	margin: 3px 5px 0px 5px;
+	text-indent: -9999px;
+	position: relative;
+}
+.btnFilter a {
+	float: right;
+    width: 24px;
+    height: 24px;
+    background: url(../images/icons/Filter.png) no-repeat 0 0;
+    background-size: 24px;
+    text-indent: -9999px;
+}
+
+.btnRefresh {
+	float: right;
+	width: 25px;
+	height: 27px;
+	margin: 3px 5px 0px 5px;
+	text-indent: -9999px;
+	position: relative;
+}
+.btnRefresh a {
+	float: right;
+    width: 24px;
+    height: 24px;
+    background: url(../images/icons/refresh.png) no-repeat 0 0;
+    background-size: 24px;
+    text-indent: -9999px;
+}
+
+.btnDownload {
+	float: right;
+	width: 25px;
+	height: 27px;
+	margin: 3px 5px 0px 5px;
+	text-indent: -9999px;
+	position: relative;
+}
+.btnDownload a {
+	float: right;
+    width: 24px;
+    height: 24px;
+    background: url(../images/icons/exceldownload.png) no-repeat 0 0;
+    background-size: 24px;
+    text-indent: -9999px;
+}
+
+.pvtCheckContainer p {
+	margin: 5px;
+}
+
+.pvtRendererArea {
+	padding: 5px;
+}
+.pvtRendererDiv {
+	position: absolute;
+    top: 31px;
+    left: 27%;
+    width: 21%;
+}
+.pvtRenderer {
+    background: #fFF;
+    box-shadow: none;
+    border-radius: 0px;
+    border: 1px solid #ccc;
+    width: 100%;
+    white-space: nowrap;
+    height: 41px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    color: #333333;
+    text-align: left;
+    padding: 1px 6px;
+}
+
+input.pvtSearch {
+	width: 80% !important;
+	height: 18px !important;
+	margin: 2px !important;
+	font-size: 12px !important;
+}
+
+.pvtFilterBox button {
+	margin: 2px;
+}
+
+.ui-select{width: 100%}
+/* This is to remove the arrow of select element in IE */
+select::-ms-expand {	display: none; }
+select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance:none;
+    appearance: none;
+}
+@-moz-document url-prefix(){
+	.ui-select{border: 1px solid #CCC; border-radius: 4px; box-sizing: border-box; position: relative; overflow: hidden;}
+  .ui-select select { width: 110%; background-position: right 30px center !important; border: none !important;}
+}
+
+.arrowIcon{
+	background: url(../images/arrow.png) no-repeat 100% 100%;
+    background-size: 14px 14px;
+    right: 10px;
+    top: 36px;
+    height: 14px;
+    padding: 0 14px 0 0;
+    position: absolute;
+}
+.arrowIconUp{
+	background: url(../images/sort_asc.png) no-repeat 100% 100%;
+    background-size: 8px 8px;
+    height: 11px;
+    padding: 0 12px 0 0;
+    position: absolute;
+}
+.arrowIconDown{
+    background: url(../images/sort_desc.png) no-repeat 100% 100%;
+    background-size: 8px 8px;
+    height: 11px;
+    padding: 0 12px 0 0;
+    position: absolute;
+}
+
+.pvtTotalLabelData{
+    text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    .pvtRendererDiv {
+        top: 31px;
+        left: 51%;
+        width: 43%;
+    }
+    .pvtAggregatorDiv {
+        top: 106px;
+        left: 4%;
+        width: 43%;
+    }
+    .pvtAttrDropdownDiv {
+        top: 106px;
+        left: 51%;
+        width: 43%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .pvtRendererDiv {
+        width: 38%;
+    }
+    .pvtAggregatorDiv {
+        width: 38%;
+    }
+    .pvtAttrDropdownDiv {
+        width: 38%;
+    }
+}
