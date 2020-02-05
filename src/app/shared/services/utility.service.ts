@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders,HttpErrorResponse} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-
-
-const url = "http://localhost:3000";
+import { SERVICE_URL } from '../app.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +17,7 @@ export class UtilityService {
   };
   constructor(private http: HttpClient) { }
 
-  call(module: string, body: any): Observable<any> {
+  call(mapping: string, body: any): Observable<any> {
     console.log(localStorage.getItem('auth'))
     if(localStorage.getItem('auth')){
       this.httpOptions = {
@@ -30,7 +28,7 @@ export class UtilityService {
       };
       //httpOptions.headers.append('auth',localStorage.getItem('auth'));
     }
-    return this.http.post<any>(url+module, body, this.httpOptions).pipe(
+    return this.http.post<any>(SERVICE_URL+mapping, body, this.httpOptions).pipe(
         catchError(this.handleError));
   }
   private handleError(error: HttpErrorResponse) {
