@@ -1,5 +1,7 @@
 {
   "name": "inoicApp",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

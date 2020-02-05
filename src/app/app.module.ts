@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SQLite } from '@ionic-native/sqlite/ngx';
 @NgModule({
     imports: [
         CommonModule,
@@ -28,7 +29,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         StatusBar,
         SplashScreen,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        AuthGuard
+        AuthGuard,
+        SQLite,
     ],
     bootstrap: [AppComponent]
 })
