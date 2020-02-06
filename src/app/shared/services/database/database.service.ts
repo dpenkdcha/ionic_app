@@ -40,11 +40,7 @@ export class DatabaseService {
     }
   }
 
-  executeQuery(): Observable<any> {
-    return null;
-  }
-
-  createQuery(data) {
+  createQuery(data): Observable<any> {
     var query = "";
     var _where = [];
     var items_mark = [];
@@ -216,10 +212,14 @@ export class DatabaseService {
       this.database.executeSql(query, items_value.concat(_where))
         .then((res) => {
           console.log('Query Executed!', JSON.stringify(res));
+          return {"status":"200","data":res}; 
         })
         .catch(e => {
           alert("error " + JSON.stringify(e))
+          return {"status":"500","data":null}; 
         });
+    } else {
+      return null; 
     }
 
   }

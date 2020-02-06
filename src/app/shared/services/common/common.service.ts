@@ -15,7 +15,7 @@ export class CommonService {
     constructor(
       public platform: Platform,
       private httpClient: HttpClient,
-      private database: DatabaseService) {
+      private databaseService: DatabaseService) {
        
       }
 
@@ -39,30 +39,23 @@ export class CommonService {
     // 
     public callService(serviceName, serviceType, urlOption?: UrlOptions): Observable<any> {
       if(this.platform.is("android") || this.platform.is("ios")) {
-        this.database.executeQuery().subscribe(
+        this.databaseService.createQuery(urlOption).subscribe(
           (res: any) => {
-            
+            if(this.checkConnnection() && res[status] === 200) { 
+              // this.callToExternalService(serviceName, serviceType, urlOption).subscribe(
+              //   (res: any) => {
+              //     this.dataToLocal(urlOption).subscribe(
+              //       (res: any) => {
+                    
+              //       }
+              //     )
+              //   }
+              // )
+            }
           }
         )
-        
-        if(this.checkConnnection()) { //add local success
-          this.makeHttpCall(serviceName, serviceType, urlOption).subscribe(
-            (res: any) => {
-              if(res[status] === 200) {
-                //to local flag update    
-                if(res[status] === 200){//local flag succes 
-                  return 1;
-                } else {
-                  return 0;
-                }
-              } else {
-                return 0;
-              }
-            }
-          );
-        } 
       } else {
-        this.makeHttpCall(serviceName, serviceType, urlOption).subscribe(
+        this.callToExternalService(serviceName, serviceType, urlOption).subscribe(
           (res: any) => {
             if(res[status] === 200) {
               return 1
@@ -75,6 +68,15 @@ export class CommonService {
       return null;
     }
 
+
+    // public dataToLocal(data): Observable<any> {
+    //   this.database.createQuery(data);
+    //   return null;
+    // }
+
+    public callToExternalService(serviceName, serviceType, urlOption): Observable<any> {
+      return this.makeHttpCall(serviceName, serviceType, urlOption)
+    }
 
     // Make http get post call  
     public makeHttpCall(serviceName, serviceType, urlOption?: UrlOptions): Observable<any> {

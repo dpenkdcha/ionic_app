@@ -29,3 +29,10 @@ export enum IdentifyPlatform {
     Web = 'WEB'
 }
 
+export enum QueryFormater {
+    SELECT = '{"SELECT":[],"TABLE":"","WHERE":{},"ORDER_BY":[],"GROUP_BY":[]}',
+    INSERT = '{"INSERT":{},"TABLE":"","WHERE":{}}',
+    UPDATE = '{"UPDATE":{},"TABLE":"","WHERE":{}}',
+    DELETE = '{"DELETE":{},"TABLE":"","WHERE":{}}',
+    INSERTORUPDATE = '{"INSERT":{},"TABLE":"","WHERE":{}}',
+}
