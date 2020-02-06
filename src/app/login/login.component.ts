@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { routerTransition } from '../router.animations';
 import { AuthService } from '../shared/services/auth.service';
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
+import { DatabaseService } from '../shared/services/database/database.service';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -14,13 +15,14 @@ export class LoginComponent implements OnInit {
     loginClicked:boolean = false;
     errorMEssage:string = "";
     constructor(
+      public dataService: DatabaseService,
       public router: Router,
       private authService:AuthService,
       private formBuilder: FormBuilder
     ) {}
 
     ngOnInit() {
-
+        
         this.loginForm = this.formBuilder.group({
             username: ['', Validators.required],
             password: ['', Validators.required]

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { ServletURL, ServiceType, UrlOptions, IdentifyPlatform } from '../../app.constant';
+import { ServletURL, ServiceType, UrlOptions, IdentifyPlatform } from '../../constants/app.constant';
 import { Platform } from '@ionic/angular';
 import { DatabaseService } from '../database/database.service';
 

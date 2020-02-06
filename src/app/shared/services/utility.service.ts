@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders,HttpErrorResponse} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { SERVICE_URL } from '../app.constant';
+import { SERVICE_URL } from '../constants/app.constant';
 
 @Injectable({
   providedIn: 'root'
