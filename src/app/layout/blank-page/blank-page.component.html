@@ -1,3 +1,49 @@
-<div id="mychart"></div>
-<div id="mychart1"></div>
-asdd asdasd asd <samp> d </samp>
+<div>
+    <div class="row">
+        <div class="card-body table-responsive">
+            <form [formGroup]="userForm">
+                <div class="form-content">
+                    <div class="form-group">
+                        <input type="text" formControlName="FNAME" class="form-control input-underline input-lg" id=""
+                            placeholder="{{ 'First Name'}}">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" formControlName="LNAME" class="form-control input-underline input-lg" id=""
+                            placeholder="{{ 'Last Name'}}">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" formControlName="UNAME" class="form-control input-underline input-lg" id=""
+                            placeholder="{{ 'User Name'}}">
+                    </div>
+                </div>
+            </form>
+            <a class="btn rounded-btn" (click)="onDataSave()">{{ 'Insert'}}</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of row_data">
+                        <th scope="row">{{$index}}</th>
+                        <td>{{item.FNAME}}}</td>
+                        <td>{{item.LNAME}}</td>
+                        <td>{{item.UNAME}}</td>
+                        <button (click)="deleteRow(item)" size="small" color="danger">Delete</button>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

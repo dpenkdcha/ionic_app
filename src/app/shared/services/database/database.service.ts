@@ -10,13 +10,14 @@ import * as DBCONSTANT from '../../constants/database.constant';
 export class DatabaseService {
 
   private database: SQLiteObject;
+  public row_data: any[];
 
   constructor(
     private sqlite: SQLite,
     private platform: Platform
   ) {
     this.platform.ready().then(() => {
-      if(this.platform.is("android")) {
+      if (this.platform.is("android")) {
         this.sqlite.create({ name: DBCONSTANT.DATABASE_NAME, location: "default" }).then((db: SQLiteObject) => {
           this.database = db;
           this.createTables();
@@ -31,13 +32,18 @@ export class DatabaseService {
 
   async createTables() {
     try {
-      await this.database.executeSql(DBCONSTANT.CREATE_QUERY.FAMILY_TABLE, []);
-      await this.database.executeSql(DBCONSTANT.CREATE_QUERY.LOCATION_TABLE, []);
-      await this.database.executeSql(DBCONSTANT.CREATE_QUERY.PRODUCT_TABLE, []);
-      await this.database.executeSql(DBCONSTANT.CREATE_QUERY.TRANSACTION_TABLE, []);
+      await this.database.executeSql(DBCONSTANT.CREATE_QUERY.USER_TABLE, []);
     } catch (e) {
       console.log("Error !");
     }
+  }
+
+  private _filterQueryToArray(response) {
+    var data = [];
+    for (var i = 0; i < response.rows.length; i++) {
+      data.push(response.rows.item(i));
+    }
+    return data;
   }
 
   createQuery(data): Observable<any> {
@@ -64,12 +70,12 @@ export class DatabaseService {
           if (!!data.WHERE.AND[item].OR) {
             for (var itemOR in data.WHERE.AND[item].OR) {
               query = query + (item == "0" && itemOR == "0" ? "((" : (itemOR == "0" ? "(" : "")) + data.WHERE.AND[item].OR[itemOR].KEY + " " + data.WHERE.AND[item].OR[itemOR].SEPERATOR + " ? ";
-              query = query + (data.WHERE.AND[item].OR.length > itemOR + 1 ? " OR " : (data.WHERE.AND.length > item + 1 ? ")" : "))"));
+              query = query + (data.WHERE.AND[item].OR.length > parseInt(itemOR) + 1 ? " OR " : (data.WHERE.AND.length > parseInt(item) + 1 ? ")" : "))"));
               _where.push(data.WHERE.AND[item].OR[itemOR].VALUE);
             }
           } else {
             query = query + (item == "0" ? "(" : "") + data.WHERE.AND[item].KEY + " " + data.WHERE.AND[item].SEPERATOR + " ? ";
-            query = query + (data.WHERE.AND.length > item + 1 ? " AND " : ")");
+            query = query + (data.WHERE.AND.length > parseInt(item) + 1 ? " AND " : ")");
             _where.push(data.WHERE.AND[item].VALUE);
           }
         }
@@ -81,12 +87,12 @@ export class DatabaseService {
           if (!!data.WHERE.OR[item].AND) {
             for (var itemAND in data.WHERE.OR[item].AND) {
               query = query + (item == "0" && itemAND == "0" ? "((" : (itemAND == "0" ? "(" : "")) + data.WHERE.OR[item].AND[itemAND].KEY + " " + data.WHERE.OR[item].AND[itemAND].SEPERATOR + " ? ";
-              query = query + (data.WHERE.OR[item].AND.length > itemAND + 1 ? " AND " : (data.WHERE.OR.length > item + 1 ? ")" : "))"));
+              query = query + (data.WHERE.OR[item].AND.length > parseInt(itemAND) + 1 ? " AND " : (data.WHERE.OR.length > parseInt(item) + 1 ? ")" : "))"));
               _where.push(data.WHERE.OR[item].AND[itemAND].VALUE);
             }
           } else {
             query = query + (item == "0" ? "(" : "") + data.WHERE.OR[item].KEY + " " + data.WHERE.OR[item].SEPERATOR + " ? ";
-            query = query + (data.WHERE.OR.length > item + 1 ? " OR " : ")");
+            query = query + (data.WHERE.OR.length > parseInt(item) + 1 ? " OR " : ")");
             _where.push(data.WHERE.OR[item].VALUE);
           }
         }
@@ -136,12 +142,12 @@ export class DatabaseService {
           if (!!data.WHERE.AND[item].OR) {
             for (var itemOR in data.WHERE.AND[item].OR) {
               query = query + (item == "0" && itemOR == "0" ? "((" : (itemOR == "0" ? "(" : "")) + data.WHERE.AND[item].OR[itemOR].KEY + " " + data.WHERE.AND[item].OR[itemOR].SEPERATOR + " ? ";
-              query = query + (data.WHERE.AND[item].OR.length > itemOR + 1 ? " OR " : (data.WHERE.AND.length > item + 1 ? ")" : "))"));
+              query = query + (data.WHERE.AND[item].OR.length > parseInt(itemOR) + 1 ? " OR " : (data.WHERE.AND.length > parseInt(item) + 1 ? ")" : "))"));
               _where.push(data.WHERE.AND[item].OR[itemOR].VALUE);
             }
           } else {
             query = query + (item == "0" ? "(" : "") + data.WHERE.AND[item].KEY + " " + data.WHERE.AND[item].SEPERATOR + " ? ";
-            query = query + (data.WHERE.AND.length > item + 1 ? " AND " : ")");
+            query = query + (data.WHERE.AND.length > parseInt(item) + 1 ? " AND " : ")");
             _where.push(data.WHERE.AND[item].VALUE);
           }
         }
@@ -153,12 +159,12 @@ export class DatabaseService {
           if (!!data.WHERE.OR[item].AND) {
             for (var itemAND in data.WHERE.OR[item].AND) {
               query = query + (item == "0" && itemAND == "0" ? "((" : (itemAND == "0" ? "(" : "")) + data.WHERE.OR[item].AND[itemAND].KEY + " " + data.WHERE.OR[item].AND[itemAND].SEPERATOR + " ? ";
-              query = query + (data.WHERE.OR[item].AND.length > itemAND + 1 ? " AND " : (data.WHERE.OR.length > item + 1 ? ")" : "))"));
+              query = query + (data.WHERE.OR[item].AND.length > parseInt(itemAND) + 1 ? " AND " : (data.WHERE.OR.length > parseInt(item) + 1 ? ")" : "))"));
               _where.push(data.WHERE.OR[item].AND[itemAND].VALUE);
             }
           } else {
             query = query + (item == "0" ? "(" : "") + data.WHERE.OR[item].KEY + " " + data.WHERE.OR[item].SEPERATOR + " ? ";
-            query = query + (data.WHERE.OR.length > item + 1 ? " OR " : ")");
+            query = query + (data.WHERE.OR.length > parseInt(item) + 1 ? " OR " : ")");
             _where.push(data.WHERE.OR[item].VALUE);
           }
         }
@@ -176,12 +182,12 @@ export class DatabaseService {
           if (!!data.WHERE.AND[item].OR) {
             for (var itemOR in data.WHERE.AND[item].OR) {
               query = query + (item == "0" && itemOR == "0" ? "((" : (itemOR == "0" ? "(" : "")) + data.WHERE.AND[item].OR[itemOR].KEY + " " + data.WHERE.AND[item].OR[itemOR].SEPERATOR + " ? ";
-              query = query + (data.WHERE.AND[item].OR.length > itemOR + 1 ? " OR " : (data.WHERE.AND.length > item + 1 ? ")" : "))"));
+              query = query + (data.WHERE.AND[item].OR.length > parseInt(itemOR) + 1 ? " OR " : (data.WHERE.AND.length > parseInt(item) + 1 ? ")" : "))"));
               _where.push(data.WHERE.AND[item].OR[itemOR].VALUE);
             }
           } else {
             query = query + (item == "0" ? "(" : "") + data.WHERE.AND[item].KEY + " " + data.WHERE.AND[item].SEPERATOR + " ? ";
-            query = query + (data.WHERE.AND.length > item + 1 ? " AND " : ")");
+            query = query + (data.WHERE.AND.length > parseInt(item) + 1 ? " AND " : ")");
             _where.push(data.WHERE.AND[item].VALUE);
           }
         }
@@ -193,12 +199,12 @@ export class DatabaseService {
           if (!!data.WHERE.OR[item].AND) {
             for (var itemAND in data.WHERE.OR[item].AND) {
               query = query + (item == "0" && itemAND == "0" ? "((" : (itemAND == "0" ? "(" : "")) + data.WHERE.OR[item].AND[itemAND].KEY + " " + data.WHERE.OR[item].AND[itemAND].SEPERATOR + " ? ";
-              query = query + (data.WHERE.OR[item].AND.length > itemAND + 1 ? " AND " : (data.WHERE.OR.length > item + 1 ? ")" : "))"));
+              query = query + (data.WHERE.OR[item].AND.length > parseInt(itemAND) + 1 ? " AND " : (data.WHERE.OR.length > parseInt(item) + 1 ? ")" : "))"));
               _where.push(data.WHERE.OR[item].AND[itemAND].VALUE);
             }
           } else {
             query = query + (item == "0" ? "(" : "") + data.WHERE.OR[item].KEY + " " + data.WHERE.OR[item].SEPERATOR + " ? ";
-            query = query + (data.WHERE.OR.length > item + 1 ? " OR " : ")");
+            query = query + (data.WHERE.OR.length > parseInt(item) + 1 ? " OR " : ")");
             _where.push(data.WHERE.OR[item].VALUE);
           }
         }
@@ -209,17 +215,27 @@ export class DatabaseService {
     }
 
     if (query != "") {
-      this.database.executeSql(query, items_value.concat(_where))
-        .then((res) => {
-          console.log('Query Executed!', JSON.stringify(res));
-          return {"status":"200","data":res}; 
-        })
-        .catch(e => {
-          alert("error " + JSON.stringify(e))
-          return {"status":"500","data":null}; 
-        });
+
+      return new Observable((resolve) => {
+        this.database.executeSql(query, items_value.concat(_where))
+          .then(
+            (res) => {
+              console.log('Query Executed!', JSON.stringify(res));
+              this.row_data = [];
+              if (!!res.rows && res.rows.length > 0) {
+                this.row_data = this._filterQueryToArray(res);                
+              }
+              resolve.next({"status": "200","data": this.row_data});
+            },
+            (error) => {
+              resolve.next({"status": "500","data": this.row_data});
+            }
+          )
+      })
+
+
     } else {
-      return null; 
+      return null;
     }
 
   }
