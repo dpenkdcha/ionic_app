@@ -12,115 +12,95 @@ import { DatabaseService } from '../database/database.service';
 })
 export class CommonService {
 
-    constructor(
-      public platform: Platform,
-      private httpClient: HttpClient,
-      private databaseService: DatabaseService) {
-       
-      }
+  constructor(
+    private platform: Platform,
+    private httpClient: HttpClient,
+    private databaseService: DatabaseService) {  }
 
 
-    // Check connection if online or offline
-    public checkConnnection() {
-      return navigator.onLine;
+  // Check connection if online or offline
+  public checkConnnection() {
+    return navigator.onLine;
+  }
+
+  // Check platform
+  public checkPlatform() {
+    if (this.platform.is("android")) {
+      return IdentifyPlatform.Android;
+    } else if (this.platform.is("ios")) {
+      return IdentifyPlatform.IOS;
+    } else {
+      return IdentifyPlatform.Web;
     }
+  }
 
-    // Check platform
-    public checkPlatform() {
-      if(this.platform.is("android")) {
-        return IdentifyPlatform.Android; 
-      } else if(this.platform.is("ios")) {
-        return IdentifyPlatform.IOS;
-      } else {
-        return IdentifyPlatform.Web;
-      }
-    }
-
-    // 
-    public callService(serviceName, serviceType, urlOption?: UrlOptions): Observable<any> {
-      if(this.platform.is("android") || this.platform.is("ios")) {
-        this.databaseService.createQuery(urlOption).subscribe(
+  // 
+  public callService(serviceName, urlOption, query): Observable<any> {
+    return new Observable((resolve) => {
+      if (this.platform.is("android") || this.platform.is("ios")) {
+        this.databaseService.createQuery(query).subscribe(
           (res: any) => {
-            if(this.checkConnnection() && res[status] === 200) { 
-              // this.callToExternalService(serviceName, serviceType, urlOption).subscribe(
-              //   (res: any) => {
-              //     this.dataToLocal(urlOption).subscribe(
-              //       (res: any) => {
-                    
-              //       }
-              //     )
-              //   }
-              // )
+            if (this.checkConnnection() && res['status'] === 200 && serviceName != '') {
+              resolve.next(this.callToExternalService(serviceName, urlOption));
+              //create flag update
+            } else if(res['status'] === 200) {
+              resolve.next(res);
+            } else {
+              //popup
+              alert("Error");
+              
+              return;
             }
           }
         )
       } else {
-        this.callToExternalService(serviceName, serviceType, urlOption).subscribe(
-          (res: any) => {
-            if(res[status] === 200) {
-              return 1
-            } else {
-              return 0
-            }
-          }
-        );
+        resolve.next(this.callToExternalService(serviceName, urlOption));
       }
-      return null;
-    }
+    });
+  }
 
-
-    // public dataToLocal(data): Observable<any> {
-    //   this.database.createQuery(data);
-    //   return null;
-    // }
-
-    public callToExternalService(serviceName, serviceType, urlOption): Observable<any> {
-      return this.makeHttpCall(serviceName, serviceType, urlOption)
-    }
-
-    // Make http get post call  
-    public makeHttpCall(serviceName, serviceType, urlOption?: UrlOptions): Observable<any> {
-        const headers = new HttpHeaders({});
-        if (urlOption && urlOption.contentType) {
-          headers.append('Content-Type', urlOption.contentType);
-        } else {  }
-    
-        const options: any = { headers };
-    
-        if (serviceType === ServiceType.GET) {
-          if (urlOption && urlOption.pathParam != null) {
-              serviceName = serviceName + urlOption.pathParam;
-          }
-          if (urlOption && urlOption.queryParams != null) {
-              options.params = urlOption.queryParams;
-          }
-    
-          console.log("HTTP GET Call...");
-          return this.httpClient.get(serviceName, options).
-                  pipe(map((res) => {
-                      return res;
-                  }));
-        } else if (serviceType === ServiceType.POST) {
-          if (urlOption && urlOption.body) {
-            const optionBody  = urlOption.body;
-            console.log("HTTP POST Call...");
-            return this.httpClient.post(`${ServletURL.baseUrl}/${serviceName}`, optionBody)
-              .pipe(
-                catchError(this.handleError)
-              );
-          }
-        }
-      }
-    
-      // Error handling of http call
-      private handleError(error: HttpErrorResponse) {
-        if (error.error instanceof ErrorEvent) {
-          console.error('An error occurred:', error.error.message);
+  private callToExternalService(serviceName, urlOption) {
+    this.makeHttpCall(serviceName, urlOption).subscribe(
+      (res: any) => {
+        if (res['status'] === 200) {
+          return res['data'];
         } else {
-          console.error('Backend returned code ${error.status}, ' + 'body was: ${error.error}');
+          //popup
+          alert("Error");
+          return;
         }
-        return throwError('Something bad happened; please try again later.');
       }
+    )
+  }
+
+  // Make http get post call  
+  private makeHttpCall(serviceName, urlOption?: UrlOptions): Observable<any> {
+    const headers = new HttpHeaders({});
+    if (urlOption && urlOption.contentType) {
+      headers.append('Content-Type', urlOption.contentType);
+    } else { }
+
+    const options: any = { headers };
+
+    if (urlOption && urlOption.body) {
+      const optionBody = urlOption.body;
+      console.log("HTTP POST Call...");
+      return this.httpClient.post(`${ServletURL.baseUrl}/${serviceName}`, optionBody)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+  }
+
+  // Error handling of http call
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      console.error('An error occurred:', error.error.message);
+    } else {
+      console.error('Backend returned code ${error.status}, ' + 'body was: ${error.error}');
+    }
+    return throwError('Something bad happened; please try again later.');
+  }
 
 
 
