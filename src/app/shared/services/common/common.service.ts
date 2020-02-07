@@ -15,7 +15,10 @@ export class CommonService {
   constructor(
     private platform: Platform,
     private httpClient: HttpClient,
-    private databaseService: DatabaseService) {  }
+    private databaseService: DatabaseService
+  ) { 
+    
+  }
 
 
   // Check connection if online or offline
@@ -41,36 +44,41 @@ export class CommonService {
         this.databaseService.createQuery(query).subscribe(
           (res: any) => {
             if (this.checkConnnection() && res['status'] === 200 && serviceName != '') {
-              resolve.next(this.callToExternalService(serviceName, urlOption));
+              this.callToExternalService(serviceName, urlOption).subscribe((res: any) => {
+                resolve.next(res);
+              });
               //create flag update
-            } else if(res['status'] === 200) {
+            } else if (res['status'] === 200) {
               resolve.next(res);
             } else {
               //popup
               alert("Error");
-              
               return;
             }
           }
         )
       } else {
-        resolve.next(this.callToExternalService(serviceName, urlOption));
+        this.callToExternalService(serviceName, urlOption).subscribe((res: any) => {
+          resolve.next(res);
+        });
       }
     });
   }
 
-  private callToExternalService(serviceName, urlOption) {
-    this.makeHttpCall(serviceName, urlOption).subscribe(
-      (res: any) => {
-        if (res['status'] === 200) {
-          return res['data'];
-        } else {
-          //popup
-          alert("Error");
-          return;
+  private callToExternalService(serviceName, urlOption): Observable<any> {
+    return new Observable((resolve) => {
+      this.makeHttpCall(serviceName, urlOption).subscribe(
+        (res: any) => {
+          if (res['status'] === 200) {
+            resolve.next(res['data']);
+          } else {
+            //popup
+            alert("Error");
+            return;
+          }
         }
-      }
-    )
+      )
+    })
   }
 
   // Make http get post call  
@@ -101,8 +109,5 @@ export class CommonService {
     }
     return throwError('Something bad happened; please try again later.');
   }
-
-
-
 
 }

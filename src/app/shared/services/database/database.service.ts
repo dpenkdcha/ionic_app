@@ -46,6 +46,25 @@ export class DatabaseService {
     return data;
   }
 
+  private executeQuery(query: string, parameter: Array<any>): Observable<any> {
+    return new Observable((resolve) => {
+      this.database.executeSql(query, parameter)
+        .then(
+          (res) => {
+            console.log('Query Executed!', JSON.stringify(res));
+            this.row_data = [];
+            if (!!res.rows && res.rows.length > 0) {
+              this.row_data = this._filterQueryToArray(res);
+            }
+            resolve.next({ "status": 200, "data": this.row_data });
+          },
+          (error) => {
+            resolve.next({ "status": 500, "data": this.row_data });
+          }
+        )
+    })
+  }
+
   createQuery(data): Observable<any> {
     var query = "";
     var _where = [];
@@ -113,9 +132,6 @@ export class DatabaseService {
           query = query + data.ORDER_BY[item].KEY + " " + data.ORDER_BY[item].VALUE + (data.ORDER_BY.length > item + 1 ? ", " : "")
         }
       }
-
-      console.log(query);
-      console.log(_where);
     } else if (!!data.INSERT) {
 
       for (var item in data.INSERT) {
@@ -124,9 +140,6 @@ export class DatabaseService {
         items_value.push(data.INSERT[item]);
       }
       query = query + "INSERT INTO " + data.TABLE + " (" + items_key.join(", ") + ") VALUES (" + items_mark.join(", ") + ")";
-
-      console.log(query);
-      console.log(items_value);
     } else if (!!data.UPDATE) {
 
       for (var item in data.UPDATE) {
@@ -169,9 +182,6 @@ export class DatabaseService {
           }
         }
       }
-
-      console.log(query);
-      console.log(items_value.concat(_where));
     } else if (!!data.DELETE) {
 
       query = query + "DELETE FROM " + data.TABLE + " ";
@@ -209,34 +219,118 @@ export class DatabaseService {
           }
         }
       }
-
-      console.log(query);
-      console.log(_where);
     }
+
+    console.log(query);
+    console.log(items_value.concat(_where));
 
     if (query != "") {
-
       return new Observable((resolve) => {
-        this.database.executeSql(query, items_value.concat(_where))
-          .then(
-            (res) => {
-              console.log('Query Executed!', JSON.stringify(res));
-              this.row_data = [];
-              if (!!res.rows && res.rows.length > 0) {
-                this.row_data = this._filterQueryToArray(res);                
-              }
-              resolve.next({"status": "200","data": this.row_data});
-            },
-            (error) => {
-              resolve.next({"status": "500","data": this.row_data});
-            }
-          )
+        this.executeQuery(query, items_value.concat(_where)).subscribe((res: any) => {
+          resolve.next(res);
+        });
       })
-
-
     } else {
-      return null;
-    }
+      if (!!data.INSERTORUPDATE) {
 
+        query = query + "SELECT * FROM " + data.TABLE;
+
+        if (!!data.WHERE && !!data.WHERE.AND && data.WHERE.AND.length > 0) {
+          query = query + (_where.length ? "" : " WHERE ");
+          for (var item in data.WHERE.AND) {
+            if (!!data.WHERE.AND[item].OR) {
+              for (var itemOR in data.WHERE.AND[item].OR) {
+                query = query + (item == "0" && itemOR == "0" ? "((" : (itemOR == "0" ? "(" : "")) + data.WHERE.AND[item].OR[itemOR].KEY + " " + data.WHERE.AND[item].OR[itemOR].SEPERATOR + " ? ";
+                query = query + (data.WHERE.AND[item].OR.length > parseInt(itemOR) + 1 ? " OR " : (data.WHERE.AND.length > parseInt(item) + 1 ? ")" : "))"));
+                _where.push(data.WHERE.AND[item].OR[itemOR].VALUE);
+              }
+            } else {
+              query = query + (item == "0" ? "(" : "") + data.WHERE.AND[item].KEY + " " + data.WHERE.AND[item].SEPERATOR + " ? ";
+              query = query + (data.WHERE.AND.length > parseInt(item) + 1 ? " AND " : ")");
+              _where.push(data.WHERE.AND[item].VALUE);
+            }
+          }
+        }
+
+        if (!!data.WHERE && !!data.WHERE.OR && data.WHERE.OR.length > 0) {
+          query = query + (_where.length ? " OR " : " WHERE ");
+          for (var item in data.WHERE.OR) {
+            if (!!data.WHERE.OR[item].AND) {
+              for (var itemAND in data.WHERE.OR[item].AND) {
+                query = query + (item == "0" && itemAND == "0" ? "((" : (itemAND == "0" ? "(" : "")) + data.WHERE.OR[item].AND[itemAND].KEY + " " + data.WHERE.OR[item].AND[itemAND].SEPERATOR + " ? ";
+                query = query + (data.WHERE.OR[item].AND.length > parseInt(itemAND) + 1 ? " AND " : (data.WHERE.OR.length > parseInt(item) + 1 ? ")" : "))"));
+                _where.push(data.WHERE.OR[item].AND[itemAND].VALUE);
+              }
+            } else {
+              query = query + (item == "0" ? "(" : "") + data.WHERE.OR[item].KEY + " " + data.WHERE.OR[item].SEPERATOR + " ? ";
+              query = query + (data.WHERE.OR.length > parseInt(item) + 1 ? " OR " : ")");
+              _where.push(data.WHERE.OR[item].VALUE);
+            }
+          }
+        }
+
+        return new Observable((resolve) => {
+          this.executeQuery(query, items_value.concat(_where)).subscribe((res: any) => {
+            query = "";
+            _where = [];
+            items_value = [];
+            if (res['status'] === 200 && res.data.length > 0) {
+              for (var item in data.INSERTORUPDATE) {
+                items_mark.push("?");
+                items_key.push(item + " = ?");
+                items_value.push(data.INSERTORUPDATE[item]);
+              }
+              query = query + "UPDATE " + data.TABLE + " SET " + items_key.join(", ");
+
+              if (!!data.WHERE && !!data.WHERE.AND && data.WHERE.AND.length > 0) {
+                query = query + (_where.length ? "" : " WHERE ");
+                for (var item in data.WHERE.AND) {
+                  if (!!data.WHERE.AND[item].OR) {
+                    for (var itemOR in data.WHERE.AND[item].OR) {
+                      query = query + (item == "0" && itemOR == "0" ? "((" : (itemOR == "0" ? "(" : "")) + data.WHERE.AND[item].OR[itemOR].KEY + " " + data.WHERE.AND[item].OR[itemOR].SEPERATOR + " ? ";
+                      query = query + (data.WHERE.AND[item].OR.length > parseInt(itemOR) + 1 ? " OR " : (data.WHERE.AND.length > parseInt(item) + 1 ? ")" : "))"));
+                      _where.push(data.WHERE.AND[item].OR[itemOR].VALUE);
+                    }
+                  } else {
+                    query = query + (item == "0" ? "(" : "") + data.WHERE.AND[item].KEY + " " + data.WHERE.AND[item].SEPERATOR + " ? ";
+                    query = query + (data.WHERE.AND.length > parseInt(item) + 1 ? " AND " : ")");
+                    _where.push(data.WHERE.AND[item].VALUE);
+                  }
+                }
+              }
+
+              if (!!data.WHERE && !!data.WHERE.OR && data.WHERE.OR.length > 0) {
+                query = query + (_where.length ? " OR " : " WHERE ");
+                for (var item in data.WHERE.OR) {
+                  if (!!data.WHERE.OR[item].AND) {
+                    for (var itemAND in data.WHERE.OR[item].AND) {
+                      query = query + (item == "0" && itemAND == "0" ? "((" : (itemAND == "0" ? "(" : "")) + data.WHERE.OR[item].AND[itemAND].KEY + " " + data.WHERE.OR[item].AND[itemAND].SEPERATOR + " ? ";
+                      query = query + (data.WHERE.OR[item].AND.length > parseInt(itemAND) + 1 ? " AND " : (data.WHERE.OR.length > parseInt(item) + 1 ? ")" : "))"));
+                      _where.push(data.WHERE.OR[item].AND[itemAND].VALUE);
+                    }
+                  } else {
+                    query = query + (item == "0" ? "(" : "") + data.WHERE.OR[item].KEY + " " + data.WHERE.OR[item].SEPERATOR + " ? ";
+                    query = query + (data.WHERE.OR.length > parseInt(item) + 1 ? " OR " : ")");
+                    _where.push(data.WHERE.OR[item].VALUE);
+                  }
+                }
+              }
+            } else {
+              for (var item in data.INSERTORUPDATE) {
+                items_mark.push("?");
+                items_key.push(item);
+                items_value.push(data.INSERTORUPDATE[item]);
+              }
+              query = query + "INSERT INTO " + data.TABLE + " (" + items_key.join(", ") + ") VALUES (" + items_mark.join(", ") + ")";
+            }
+            console.log(query);
+            console.log(items_value.concat(_where));
+            this.executeQuery(query, items_value.concat(_where)).subscribe((res: any) => {
+              resolve.next(res);
+            });
+          });
+        });
+      }
+    }
   }
 }

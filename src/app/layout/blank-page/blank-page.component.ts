@@ -15,9 +15,11 @@ export class BlankPageComponent implements OnInit {
     formateQuery: any = {};
     userForm:FormGroup;
     row_data:Array<any> = [];
-    constructor(private database: DatabaseService,private formBuilder: FormBuilder,
-                private commonservice: CommonService) {
-
+    constructor(
+        private database: DatabaseService,
+        private formBuilder: FormBuilder,
+        private commonservice: CommonService
+    ) {
 
     }
     
@@ -30,42 +32,6 @@ export class BlankPageComponent implements OnInit {
         });
 
         this.loadExistingData();
-        // this.database.createQuery(this.formateQuery).subscribe(res => {
-        //     this.row_data = res['data'];
-        // });
-
-    //     this.salesService.getSales().subscribe((res: any) => {
-    //         var config = {
-    //             aggregatorName:"Count",
-    //             rendererName:"Bar Chart", 
-    //             rows:["Customer Name"],
-    //             cols:["Product Code"],
-    //             inclusions:{},
-    //             vals:[],
-    //             data:  res.data,
-    //             control:true,
-    //             renderers :$.extend($.pivotUtilities.renderers,$.pivotUtilities.c3_renderers),
-    //             title:"",
-    //             accordian:false
-    //         };
-    //        let object = $("#mychart").pivotUI(config.data, {
-    //             control:config.control,
-    //             renderers: config.renderers,
-    //             "aggregatorName":config.aggregatorName,"rendererName":config.rendererName,"rows":config.rows,"cols":config.cols,"vals":config.vals,"inclusions":config.inclusions
-    //         });
-     
-    //         //aggregator: sumOverSum(["tip", "total_bill"]),
-            
-    //         let object1 = $("#mychart1").pivot(config.data, {
-    //             renderer: $.pivotUtilities.c3_renderers["Pie Chart"],
-    //             aggregator:$.pivotUtilities.aggregators["Count"](),
-    //             //renderers: $.extend($.pivotUtilities.renderers,$.pivotUtilities.c3_renderers),
-    //             "rows":config.rows,"cols":config.cols,"vals":config.vals,"inclusions":config.inclusions
-    //         });
-    //       }, err => {
-    //         console.log(err);
-    //       });
-        
     } 
 
     loadExistingData() {
@@ -80,14 +46,13 @@ export class BlankPageComponent implements OnInit {
     
     onDataSave() {
         if(this.userForm.valid) {
-            this.formateQuery = JSON.parse(QueryFormater.INSERT)
+            this.formateQuery = JSON.parse(QueryFormater.INSERTORUPDATE)
             this.formateQuery.TABLE = 'USER';
-            this.formateQuery.INSERT = this.userForm.value;
-            this.commonservice.callService("", this.formateQuery, this.formateQuery).subscribe(
-                (res: any) => {
-                    this.loadExistingData();
-                }
-            )
+            this.formateQuery.INSERTORUPDATE = this.userForm.value;
+            this.formateQuery.WHERE = {"AND":[{"KEY":"FNAME","SEPERATOR":"=","VALUE":this.userForm.value.FNAME}]};
+            this.commonservice.callService("", this.formateQuery, this.formateQuery).subscribe(res => {
+                this.loadExistingData();
+            });
         } else {
             alert("Please Fill Valid Data");
         }

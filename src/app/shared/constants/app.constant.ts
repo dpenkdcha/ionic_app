@@ -34,5 +34,5 @@ export enum QueryFormater {
     INSERT = '{"INSERT":{},"TABLE":"","WHERE":{}}',
     UPDATE = '{"UPDATE":{},"TABLE":"","WHERE":{}}',
     DELETE = '{"DELETE":{},"TABLE":"","WHERE":{}}',
-    INSERTORUPDATE = '{"INSERT":{},"TABLE":"","WHERE":{}}',
+    INSERTORUPDATE = '{"INSERTORUPDATE":{},"TABLE":"","WHERE":{}}',
 }
