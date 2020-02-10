@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SalesService } from '../../shared/services/sales.service';
-import { DatabaseService } from 'src/app/shared/services/database/database.service';
 import { QueryFormater } from 'src/app/shared/constants/app.constant';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule  } from '@angular/forms';
 import { CommonService } from 'src/app/shared/services/common/common.service';
@@ -16,7 +14,6 @@ export class BlankPageComponent implements OnInit {
     userForm:FormGroup;
     row_data:Array<any> = [];
     constructor(
-        private database: DatabaseService,
         private formBuilder: FormBuilder,
         private commonservice: CommonService
     ) {
@@ -51,6 +48,19 @@ export class BlankPageComponent implements OnInit {
             this.formateQuery.INSERTORUPDATE = this.userForm.value;
             this.formateQuery.WHERE = {"AND":[{"KEY":"FNAME","SEPERATOR":"=","VALUE":this.userForm.value.FNAME}]};
             this.commonservice.callService("", this.formateQuery, this.formateQuery).subscribe(res => {
+                this.formateQuery = JSON.parse(QueryFormater.INSERT)
+                this.formateQuery.TABLE = 'USER';
+                this.formateQuery.INSERT = this.userForm.value;
+                this.commonservice.callService("", this.formateQuery, this.formateQuery).subscribe(res => {
+
+                });
+                this.formateQuery = JSON.parse(QueryFormater.UPDATE)
+                this.formateQuery.TABLE = 'USER';
+                this.formateQuery.UPDATE = this.userForm.value;
+                this.formateQuery.WHERE = {"AND":[{"KEY":"FNAME","SEPERATOR":"=","VALUE":this.userForm.value.FNAME}]};
+                this.commonservice.callService("", this.formateQuery, this.formateQuery).subscribe(res => {
+
+                });
                 this.loadExistingData();
             });
         } else {

@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { routerTransition } from '../router.animations';
 import { AuthService } from '../shared/services/auth.service';
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
-import { DatabaseService } from '../shared/services/database/database.service';
 import { CommonService } from '../shared/services/common/common.service';
 import { QueryFormater } from '../shared/constants/app.constant';
 @Component({
@@ -18,12 +17,10 @@ export class LoginComponent implements OnInit {
     errorMEssage:string = "";
     formateQuery:any = {};
     constructor(
-      public dataService: DatabaseService,
       public router: Router,
       private authService:AuthService,
       private formBuilder: FormBuilder,
-      private commonService: CommonService,
-      private databaseService: DatabaseService
+      private commonService: CommonService
     ) {}
 
     ngOnInit() {

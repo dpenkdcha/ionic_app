@@ -31,7 +31,7 @@ export enum IdentifyPlatform {
 
 export enum QueryFormater {
     SELECT = '{"SELECT":[],"TABLE":"","WHERE":{},"ORDER_BY":[],"GROUP_BY":[]}',
-    INSERT = '{"INSERT":{},"TABLE":"","WHERE":{}}',
+    INSERT = '{"INSERT":{},"TABLE":""}',
     UPDATE = '{"UPDATE":{},"TABLE":"","WHERE":{}}',
     DELETE = '{"DELETE":{},"TABLE":"","WHERE":{}}',
     INSERTORUPDATE = '{"INSERTORUPDATE":{},"TABLE":"","WHERE":{}}',
