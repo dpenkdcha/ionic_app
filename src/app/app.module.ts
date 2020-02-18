@@ -13,6 +13,11 @@ import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SQLite } from '@ionic-native/sqlite/ngx';
+import { PopupComponent } from './shared/modules/popup/popup.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PopupModule } from './shared/modules/popup/popup.module';
+
+
 @NgModule({
     imports: [
         CommonModule,
@@ -22,7 +27,9 @@ import { SQLite } from '@ionic-native/sqlite/ngx';
         HttpClientModule,
         LanguageTranslationModule,
         AppRoutingModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgbModule,
+        PopupModule 
     ],
     declarations: [AppComponent],
     providers: [
@@ -30,8 +37,9 @@ import { SQLite } from '@ionic-native/sqlite/ngx';
         SplashScreen,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         AuthGuard,
-        SQLite,
+        SQLite
     ],
+    entryComponents: [PopupComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

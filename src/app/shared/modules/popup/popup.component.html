@@ -1,0 +1,34 @@
+<div *ngIf="modalData.TYPE === 'default'">
+  <div class="modal-header">
+    <h4 class="modal-title">{{modalData.HEADER}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{modalData.BODY}}&hellip;</p>
+  </div>
+  <div class="modal-footer">
+    <button *ngFor="let item of modalData.BUTTON" type="button" class="btn btn-secondary"
+      (click)="activeModal.close(item)">{{item}}</button>
+  </div>
+</div>
+
+<div *ngIf="modalData.TYPE === 'default1'">
+  <div class="modal-header">
+    <h4 class="modal-title">{{modalData.HEADER}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body abc">
+    <p>{{modalData.BODY}}&hellip;</p>
+    <p>{{modalData.BODY}}&hellip;</p>
+    <p>{{modalData.BODY}}&hellip;</p>
+    <h1>Hello dynamic</h1>
+  </div>
+  <div class="modal-footer">
+    <button *ngFor="let item of modalData.BUTTON" type="button" class="btn btn-secondary"
+      (click)="activeModal.close(item)">{{item}}</button>
+  </div>
+</div>

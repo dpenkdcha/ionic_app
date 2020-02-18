@@ -5,6 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { ServletURL, ServiceType, UrlOptions, IdentifyPlatform } from '../../constants/app.constant';
 import { Platform } from '@ionic/angular';
 import { DatabaseService } from '../database/database.service';
+import { PopupService } from '../popup/popup.service';
 
 
 @Injectable({
@@ -15,12 +16,13 @@ export class CommonService {
   constructor(
     private platform: Platform,
     private httpClient: HttpClient,
-    private databaseService: DatabaseService
+    private databaseService: DatabaseService,
+    private popupService: PopupService
   ) { 
     
   }
 
-
+  
   // Check connection if online or offline
   public checkConnnection() {
     return navigator.onLine;
@@ -47,20 +49,39 @@ export class CommonService {
               this.callToExternalService(serviceName, urlOption).subscribe((res: any) => {
                 resolve.next(res);
               });
-              //create flag update
             } else if (res['status'] === 200) {
-              resolve.next(res);
+              this.databaseService.createQuery(query).subscribe(//update flag
+                (res: any) => {
+                  if(res['status'] === 200) {
+                    resolve.next(res);
+                  } else {
+                    //show flag update false flag
+                  }
+                }
+              )
             } else {
-              //popup
-              alert("Error");
+              this.popupService.openPopup('iRecruit' ,"Flag updation failed",["Ok"]).subscribe(
+                (res: any) => {
+                  if(res === 'Ok'){
+                    return;
+                  }
+                }
+              )
+            }
+          }
+        )
+      } else if(serviceName && urlOption) {
+        this.callToExternalService(serviceName, urlOption).subscribe((res: any) => {
+          resolve.next(res);
+        });
+      } else{
+        this.popupService.openPopup('iRecruit' ,"Exteranl service failed",["Ok"]).subscribe(
+          (res: any) => {
+            if(res === 'Ok'){
               return;
             }
           }
         )
-      } else {
-        this.callToExternalService(serviceName, urlOption).subscribe((res: any) => {
-          resolve.next(res);
-        });
       }
     });
   }
@@ -71,11 +92,16 @@ export class CommonService {
         (res: any) => {
           if (res['status'] === 200) {
             resolve.next(res['data']);
-          } else {
-            //popup
-            alert("Error");
-            return;
           }
+        },
+        (error: any) => {
+          this.popupService.openPopup('iRecruit' ,"Exteranl service failed",["Ok"]).subscribe(
+            (res: any) => {
+              if(res === 'Ok'){
+                return;
+              }
+            }
+          )
         }
       )
     })
@@ -97,6 +123,8 @@ export class CommonService {
         .pipe(
           catchError(this.handleError)
         );
+    } else {
+      return 
     }
   }
 

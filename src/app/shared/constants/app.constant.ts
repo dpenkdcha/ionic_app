@@ -36,3 +36,7 @@ export enum QueryFormater {
     DELETE = '{"DELETE":{},"TABLE":"","WHERE":{}}',
     INSERTORUPDATE = '{"INSERTORUPDATE":{},"TABLE":"","WHERE":{}}',
 }
+
+export enum PopupFormater {
+    Popup = '{"TITLE":"","BODY":"","BUTTON":[],"CONDITION":{}}'
+}
