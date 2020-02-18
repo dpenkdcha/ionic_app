@@ -1,0 +1,34 @@
+<p>
+  application-form works!!
+</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler" (click)="expandNavbar = !expandNavbar" type="button">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="navbar-collapse" [ngClass]="expandNavbar ? '' : 'collapse'">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <div class="nav-link" routerLink="personal-details">Personal Details</div>
+      </li>
+      <li class="nav-item">
+        <div class="nav-link" routerLink="contact-details">Contact Details</div>
+      </li>
+      <li class="nav-item">
+        <div class="nav-link" routerLink="financial-details">Financial Details</div>
+      </li>
+      <li class="nav-item">
+        <div class="nav-link" routerLink="education-details">Education Details</div>
+      </li>
+      <li class="nav-item">
+        <div class="nav-link" routerLink="professional-details">Professional Details</div>
+      </li>
+      <li class="nav-item">
+        <div class="nav-link" routerLink="additional-details">Additional Details</div>
+      </li>
+      <li class="nav-item">
+        <div class="nav-link" routerLink="document-upload">Document Upload</div>
+      </li>
+    </ul>
+  </div>
+</nav>
+<router-outlet></router-outlet>
