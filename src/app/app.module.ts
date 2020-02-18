@@ -16,7 +16,7 @@ import { SQLite } from '@ionic-native/sqlite/ngx';
 import { PopupComponent } from './shared/modules/popup/popup.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PopupModule } from './shared/modules/popup/popup.module';
-
+import { SpinnerModule } from './shared/modules/spinner/spinner.module';
 
 @NgModule({
     imports: [
@@ -29,7 +29,8 @@ import { PopupModule } from './shared/modules/popup/popup.module';
         AppRoutingModule,
         ReactiveFormsModule,
         NgbModule,
-        PopupModule 
+        PopupModule,
+        SpinnerModule
     ],
     declarations: [AppComponent],
     providers: [
